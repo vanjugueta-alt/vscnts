@@ -1,1 +1,669 @@
-[{"category": "MEN", "name": "Not Your Ordinary", "og": "Aventus 2010 (Twist)", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "BLUE ICE", "og": "Hawas ICE", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "T@lisman", "og": "Blue talisman extrait", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "Rebellion", "og": "9pm rebel", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "Valentine", "og": "Prada Paradoigme", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "FIREPLACE", "og": "MMM By the Fireplace", "prices": {"55": 610, "100": 1250}}, {"category": "MEN", "name": "Erva", "og": "Erba Pura", "prices": {"55": 549, "100": 1180}}, {"category": "MEN", "name": "ELECTRIQUE", "og": "Bad Boy Cobalt Electrique EDP", "prices": {"55": 549, "100": 1180}}, {"category": "MEN", "name": "Aurora", "og": "Y EDP", "prices": {"55": 549, "100": 1180}}, {"category": "MEN", "name": "Ultra M@le", "og": "Ultra male", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Elixir", "og": "Le male elixir", "prices": {"55": 549, "100": 1180}}, {"category": "MEN", "name": "Fire", "og": "Eros Flame", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Wanted", "og": "Azzaro TMW EDP", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Blue Poison", "og": "BDC EDP", "prices": {"55": 549, "100": 1180}}, {"category": "MEN", "name": "Rouge", "og": "Sauvage EDP", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Ecl@t", "og": "Eclat men", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Sven", "og": "Invictus", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Poseidon", "og": "ADG EDT", "prices": {"55": 499, "100": 1069}}, {"category": "MEN", "name": "Suit 67", "og": "POLO 67", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Imagine", "og": "LV - Imagination", "prices": {"55": 599, "100": 1200}}, {"category": "UNISEX", "name": "PM Vibes", "og": "LV - AfternoonSwim", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "Symph", "og": "LV - Symphony", "prices": {"55": 610, "100": 1250}}, {"category": "UNISEX", "name": "Silver", "og": "Gentle Fluidity SILVER", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "Gold", "og": "Gentle Fluidity GOLD", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "INFERNO", "og": "God of Fire", "prices": {"55": 610, "100": 1250}}, {"category": "UNISEX", "name": "PAPYRÉ", "og": "Diptyque l'eau papier EDT", "prices": {"55": 599, "100": 1200}}, {"category": "UNISEX", "name": "ETHEREAL", "og": "Acne Studios", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "Dark Addiction", "og": "Tom Ford Fvcking Fabulous", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "NEROLI", "og": "Tom Ford Neroli Portofino", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "SMOKE No.7", "og": "Xerjoff Naxos XJ 1861", "prices": {"55": 549, "100": 1180}}, {"category": "UNISEX", "name": "Player 540", "og": "BR540", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Sahara", "og": "Byredo Bal d'afrique EDP", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Blanc Musk", "og": "Byredo Blanche", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Ghost", "og": "Byredo mojave ghost", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Aura XIII", "og": "Le Labo another 13", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Sant@l 33", "og": "Le Labo Santal 33", "prices": {"55": 499, "100": 1069}}, {"category": "UNISEX", "name": "Woody sea", "og": "Jo Malone Wood Sage & Sea Salt", "prices": {"55": 499, "100": 1069}}, {"category": "WOMEN", "name": "LAYA", "og": "Valaya Parfums de Marly", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "LAYA XCLUSIF", "og": "Valaya Parfums de Marly Exclusif", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "VELVET ROSE", "og": "Carolina Herrera Good Girl", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "VELVET DESIRE", "og": "Carolina Herrera Very Good Girl", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "PURPLE CRYSTAL", "og": "Bvlgari Omnia Amethyste", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "PRADOXE", "og": "Prada Paradoxe", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "LIBRE", "og": "YSL Libre", "prices": {"50": 549, "100": 1180}}, {"category": "WOMEN", "name": "SCANDAL", "og": "SCANDALOUS", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "AMORE", "og": "Born in Roma Women", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "QUEEN", "og": "Killer Queen", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "BOMB", "og": "Bombshell", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "KISSES", "og": "Dark kiss", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "ECLAIRE", "og": "Eclat Women", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "CANDY 42", "og": "KAYALI 42 (VANILLA CANDY ROCK SUGAR)", "prices": {"50": 499, "100": 1069}}, {"category": "WOMEN", "name": "PISTACHE 33", "og": "KAYALI 33 (pistachio gelato)", "prices": {"50": 499, "100": 1069}}, {"category": "EMPEROR SERIES", "name": "Av3ntus x S@ntal 33", "og": "EMPEROR I", "prices": {"50": 689}}, {"category": "EMPEROR SERIES", "name": "Av3ntus x GOF", "og": "EMPEROR II", "prices": {"50": 689}}, {"category": "EMPEROR SERIES", "name": "Av3ntus x GFS", "og": "EMPEROR III", "prices": {"50": 689}}, {"category": "EMPEROR SERIES", "name": "Aventus x Another 13", "og": "EMPEROR IV", "prices": {"50": 689}}, {"category": "EMPEROR SERIES", "name": "Aventus x Mojave Ghost", "og": "EMPEROR V", "prices": {"50": 689}}, {"category": "CANNABIS SERIES", "name": "Silver x CANNA", "og": "MERCURY", "prices": {"50": 749}}, {"category": "CANNABIS SERIES", "name": "Aventus x CANNA", "og": "PINEAPPLE EXPRESS", "prices": {"50": 749}}, {"category": "CANNABIS SERIES", "name": "Talisman x CANNA", "og": "CRYPTONITE", "prices": {"50": 749}}]
+[
+  {
+    "category": "MEN",
+    "name": "Not Your Ordinary",
+    "og": "Aventus 2010 (Twist)",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Fruity, Citrus, Woody, Smoky, Leather, Sweet",
+    "keyNotes": "Pineapple, Bergamot, Blackcurrant, Apple, Birch, Patchouli, Moroccan Jasmine, Rose, Musk, Oakmoss, Ambergris, Vanilla",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "MEN",
+    "name": "BLUE ICE",
+    "og": "Hawas ICE",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Fruity, Citrus, Sweet, Fresh, Aromatic, Musky, Powdery, Fresh Spicy, Green, Amber",
+    "keyNotes": "Apple, Italian Lemon, Sicilian Bergamot, Star Anise, Plum, Orange Blossom, Cardamom, Musk, Amber, Driftwood, Moss",
+    "howCloseToOG": 0.97
+  },
+  {
+    "category": "MEN",
+    "name": "T@lisman",
+    "og": "Blue talisman extrait",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Woody, White Floral, Sweet, Fruity, Citrus, Amber, Powdery, Vanilla, Aquatic, Musky",
+    "keyNotes": "Pear, Mandarin Orange, Bergamot, Ginger, Orange Blossom, Jasmine, Tuberose, Ambrette, Akigalawood, Cedar, Amber, Vanilla",
+    "howCloseToOG": 0.9
+  },
+  {
+    "category": "MEN",
+    "name": "Rebellion",
+    "og": "9pm rebel",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Fruity, Sweet, Woody, Tropical, Fresh, Mossy",
+    "keyNotes": "Mandarin Orange, Pineapple, Granny Smith Apple, Bergamot, Green Notes, Oakmoss, Cedar, Vanilla, Caramel, Amber, Patchouli",
+    "howCloseToOG": 0.98
+  },
+  {
+    "category": "MEN",
+    "name": "Valentine",
+    "og": "Prada Paradoigme",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Fresh Spicy, Amber, Woody, Citrus, Aromatic, Balsamic",
+    "keyNotes": "Calabrian Bergamot, Cardamom, Pink Pepper, Nutmeg, Geranium, Lavender, Vanilla, Tonka Bean, Amber, Opoponax, Patchouli",
+    "howCloseToOG": 0.92
+  },
+  {
+    "category": "MEN",
+    "name": "FIREPLACE",
+    "og": "MMM By the Fireplace",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Woody, Vanilla, Balsamic, Warm Spicy, Amber, Smoky",
+    "keyNotes": "Clove, Pink Pepper, Orange Blossom, Chestnut, Guaiac Wood, Cade Oil, Juniper, Vanilla, Peru Balsam, Cashmeran",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "MEN",
+    "name": "Erva",
+    "og": "Erba Pura",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Citrus, Fruity, Sweet, Musky, Powdery, Vanilla",
+    "keyNotes": "Calabrian Bergamot, Sicilian Orange, Mediterranean Fruits, Amber, Madagascar Vanilla, White Musk",
+    "howCloseToOG": 0.95
+  },
+  {
+    "category": "MEN",
+    "name": "ELECTRIQUE",
+    "og": "Bad Boy Cobalt Electrique EDP",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Aromatic, Woody, Fruity, Fresh, Mineral, Earthy",
+    "keyNotes": "Pink Pepper, Plum, Lavender, Geranium, Truffle, Cedar, Oak, Vetiver, Tonka Bean, Cacao",
+    "howCloseToOG": 0.97
+  },
+  {
+    "category": "MEN",
+    "name": "Aurora",
+    "og": "Y EDP",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Aromatic, Fresh Spicy, Woody, Fruity, Fresh, Amber",
+    "keyNotes": "Apple, Bergamot, Ginger, Aldehydes, Sage, Juniper Berries, Geranium, Amberwood, Cedar, Vetiver, Olibanum, Tonka Bean",
+    "howCloseToOG": 0.95
+  },
+  {
+    "category": "MEN",
+    "name": "Ultra M@le",
+    "og": "Ultra male",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Vanilla, Fruity, Sweet, Aromatic, Cinnamon, Warm Spicy",
+    "keyNotes": "Pear, Lavender, Mint, Bergamot, Cinnamon, Clary Sage, Caraway, Black Vanilla Husk, Amber, Cedar, Patchouli",
+    "howCloseToOG": 0.93
+  },
+  {
+    "category": "MEN",
+    "name": "Elixir",
+    "og": "Le male elixir",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Vanilla, Sweet, Honey, Aromatic, Amber, Tobacco",
+    "keyNotes": "Lavender, Mint, Cinnamon, Cardamom, Bergamot, Benzoin, Tonka Bean, Vanilla, Honey, Tobacco, Amber",
+    "howCloseToOG": 0.97
+  },
+  {
+    "category": "MEN",
+    "name": "Fire",
+    "og": "Eros Flame",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Sweet, Spicy, Citrus, Fruity, Fresh",
+    "keyNotes": "Italian Lemon, Mandarin Orange, Chinotto, Black Pepper, Rosemary, Geranium, Rose, Patchouli, Vetiver, Tonka Bean, Vanilla, Moss",
+    "howCloseToOG": 0.93
+  },
+  {
+    "category": "MEN",
+    "name": "Wanted",
+    "og": "Azzaro TMW EDP",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Sweet, Spicy, Gourmand, Woody, Synthetic",
+    "keyNotes": "Cardamom, Toffee, Amberwood, Bourbon Vanilla",
+    "howCloseToOG": 0.87
+  },
+  {
+    "category": "MEN",
+    "name": "Blue Poison",
+    "og": "BDC EDP",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Citrus, Amber, Woody, Fresh Spicy, Aromatic, Smoky",
+    "keyNotes": "Lemon, Grapefruit, Pink Pepper, Mint, Bergamot, Ginger, Nutmeg, Jasmine, Cedar, Sandalwood, Patchouli, Frankincense, Labdanum",
+    "howCloseToOG": 0.92
+  },
+  {
+    "category": "MEN",
+    "name": "Rouge",
+    "og": "Sauvage EDP",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Fresh Spicy, Citrus, Amber, Aromatic, Lavender, Musky",
+    "keyNotes": "Calabrian Bergamot, Grapefruit, Pepper, Lavender, Sichuan Pepper, Nutmeg, Pink Pepper, Geranium, Patchouli, Vetiver, Ambroxan, Vanilla",
+    "howCloseToOG": 0.9
+  },
+  {
+    "category": "MEN",
+    "name": "Ecl@t",
+    "og": "Eclat men",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Citrus, Ozonic, Woody, Aquatic, Fresh Spicy, Aromatic",
+    "keyNotes": "Bergamot, Lemon, Lavender, Mandarin Orange, Mint, Juniper, Green Apple, Jasmine, Rose, Teak Wood, Cedar, Sandalwood, Musk",
+    "howCloseToOG": 0.95
+  },
+  {
+    "category": "MEN",
+    "name": "Sven",
+    "og": "Invictus",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Citrus, Marine, Aromatic, Fresh Spicy, Woody, Salty",
+    "keyNotes": "Sea Notes, Grapefruit, Mandarin Orange, Bay Leaf, Jasmine, Guaiac Wood, Patchouli, Ambergris, Oakmoss",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "MEN",
+    "name": "Poseidon",
+    "og": "ADG EDT",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Citrus, Aromatic, Marine, Fresh Spicy, Floral, Woody",
+    "keyNotes": "Sea Notes, Lime, Bergamot, Neroli, Jasmine, Rosemary, Persimmon, Patchouli, Cedar, White Musk, Amber",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "MEN",
+    "name": "Suit 67",
+    "og": "POLO 67",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Woody, Citrus, Fresh/Aquatic, Aromatic, Fruity",
+    "keyNotes": "Pineapple, Bergamot, Green Apple, Sea Notes, Lavandin, Geranium, Clary Sage, Vetiver, Sandalwood, Patchouli",
+    "howCloseToOG": 0.9
+  },
+  {
+    "category": "UNISEX",
+    "name": "Imagine",
+    "og": "LV - Imagination",
+    "prices": {
+      "55": 599,
+      "100": 1200
+    },
+    "mainAccords": "Citrus, Fresh Spicy, Green, Fresh, Aromatic",
+    "keyNotes": "Citron, Calabrian Bergamot, Sicilian Orange, Tunisian Neroli, Nigerian Ginger, Ceylon Cinnamon, Chinese Black Tea, Ambroxan, Guaiac Wood, Olibanum",
+    "howCloseToOG": 0.91
+  },
+  {
+    "category": "UNISEX",
+    "name": "PM Vibes",
+    "og": "LV - AfternoonSwim",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Citrus, Fresh Spicy, Sweet, Aromatic, Amber",
+    "keyNotes": "Mandarin Orange, Sicilian Orange, Bergamot, Ginger, Ambergris",
+    "howCloseToOG": 0.91
+  },
+  {
+    "category": "UNISEX",
+    "name": "Symph",
+    "og": "LV - Symphony",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Citrus, Fresh Spicy, Aromatic, Floral, Bitter",
+    "keyNotes": "Grapefruit, Bergamot, Ginger",
+    "howCloseToOG": 0.9
+  },
+  {
+    "category": "UNISEX",
+    "name": "Silver",
+    "og": "Gentle Fluidity SILVER",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Aromatic, Fresh Spicy, Woody, Musky, Powdery",
+    "keyNotes": "Juniper Berries, Nutmeg, Coriander, Musk, Amberwood, Vanilla",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "Gold",
+    "og": "Gentle Fluidity GOLD",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Vanilla, Powdery, Musky, Sweet, Aromatic, Fresh Spicy, Woody",
+    "keyNotes": "Juniper Berries, Nutmeg, Coriander, Musk, Amberwood, musk, caramel, and amberwood, Vanilla",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "INFERNO",
+    "og": "God of Fire",
+    "prices": {
+      "55": 610,
+      "100": 1250
+    },
+    "mainAccords": "Fruity, Tropical, Sweet, Citrus, Fresh, Woody, Fresh Spicy, Musky, Terpenic, Oud",
+    "keyNotes": "Mango, Lemon, Ginger, Red Berries, Coumarin, Jasmine, Cedar, Musk, Oud, Amber, Cypriol",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "PAPYRÉ",
+    "og": "Diptyque l'eau papier EDT",
+    "prices": {
+      "55": 599,
+      "100": 1200
+    },
+    "mainAccords": "Woody, Powdery, Musky, Yellow Floral, Sweet, Lactonic, Savory",
+    "keyNotes": "White Musk, Mimosa, Blonde Woods, Rice Steam, Sesame",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "ETHEREAL",
+    "og": "Acne Studios",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Aldehydic, Powdery, Fresh, Woody, White Floral, Musky, Fruity, Soapy, Amber, Citrus",
+    "keyNotes": "Aldehydes, Mandarin, Bergamot, Peach, Orange Blossom, Violet, Rose, Lily of the Valley, Jasmine, Musk, Iso E Super, Sandalwood, Frankincense, Vanilla, Heliotrope",
+    "howCloseToOG": 0.9
+  },
+  {
+    "category": "UNISEX",
+    "name": "Dark Addiction",
+    "og": "Tom Ford Fvcking Fabulous",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Aromatic, Leather, Vanilla, Almond, Woody, Amber, Lavender, Sweet, Powdery, Animalic",
+    "keyNotes": "Lavender, Clary Sage, Leather, Bitter Almond, Vanilla, Orris, Tonka Bean, Cashmeran, White Woods, Amber",
+    "howCloseToOG": 0.92
+  },
+  {
+    "category": "UNISEX",
+    "name": "NEROLI",
+    "og": "Tom Ford Neroli Portofino",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Citrus, White Floral, Aromatic, Fresh Spicy, Floral",
+    "keyNotes": "Bergamot, Mandarin Orange, Lemon, Bitter Orange, Lavender, Rosemary, Myrtle, African Orange Flower, Neroli, Jasmine, Pitosporum, Amber, Ambrette, Angelica",
+    "howCloseToOG": 0.92
+  },
+  {
+    "category": "UNISEX",
+    "name": "SMOKE No.7",
+    "og": "Xerjoff Naxos XJ 1861",
+    "prices": {
+      "55": 549,
+      "100": 1180
+    },
+    "mainAccords": "Sweet, Honey, Vanilla, Tobacco, Lavender, Citrus, Aromatic, Floral, Powdery, Warm Spicy",
+    "keyNotes": "Lavender, Bergamot, Lemon, Honey, Cinnamon, Cashmeran, Jasmine Sambac, Tobacco Leaf, Vanilla, Tonka Bean",
+    "howCloseToOG": 0.97
+  },
+  {
+    "category": "UNISEX",
+    "name": "Player 540",
+    "og": "BR540",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Woody, Amber, Warm Spicy, Metallic, Fresh Spicy, Aromatic, White Floral, Animalic, Fresh",
+    "keyNotes": "Saffron, Jasmine, Amberwood, Ambergris, Hedione, Fir Resin, Cedar, Sugar, Ambroxan, Oakmoss",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "Sahara",
+    "og": "Byredo Bal d'afrique EDP",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Woody, Aromatic, Earthy, Violet, Floral, Powdery, Fresh, Green",
+    "keyNotes": "Bergamot, African Marigold, Buchu, Lemon, Neroli, Violet, Cyclamen, Jasmine, Vetiver, Cedar",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "Blanc Musk",
+    "og": "Byredo Blanche",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Fresh, Aldehydic, Musky, Powdery, Floral, Rose, Violet, Soapy, Woody, White Floral",
+    "keyNotes": "Aldehydes, Rose, Pink Pepper, Peony, Violet, African Orange Flower, Musk, Woodsy Notes, Sandalwood",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "Ghost",
+    "og": "Byredo mojave ghost",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Floral, Powdery, Woody, Violet, Musky, Fruity, Amber, Citrus",
+    "keyNotes": "Sapodilla, Ambrette, Magnolia, Violet, Sandalwood, Ambergris, Cedar, Musk",
+    "howCloseToOG": 0.94
+  },
+  {
+    "category": "UNISEX",
+    "name": "Aura XIII",
+    "og": "Le Labo another 13",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Musky, Amber, Woody, Animalic, Fruity, Powdery, Floral",
+    "keyNotes": "Pear, Apple, Citruses, Ambrette, Amyl Salicylate, Moss, Jasmine, Iso E Super, Cetalox, Helvetolide, Ambrettolide",
+    "howCloseToOG": 0.93
+  },
+  {
+    "category": "UNISEX",
+    "name": "Sant@l 33",
+    "og": "Le Labo Santal 33",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Woody, Powdery, Leather, Warm Spicy, Violet, Iris",
+    "keyNotes": "Sandalwood, Leather, Papyrus, Virginia Cedar, Cardamom, Violet, Iris, Amber",
+    "howCloseToOG": 0.92
+  },
+  {
+    "category": "UNISEX",
+    "name": "Woody sea",
+    "og": "Jo Malone Wood Sage & Sea Salt",
+    "prices": {
+      "55": 499,
+      "100": 1069
+    },
+    "mainAccords": "Aromatic, Salty, Marine, Citrus, Musky, Herbal, Soft Spicy, Floral, Aquatic",
+    "keyNotes": "Sea Salt, Sage, Grapefruit, Ambrette, Seaweed",
+    "howCloseToOG": 0.93
+  },
+  {
+    "category": "WOMEN",
+    "name": "LAYA",
+    "og": "Valaya Parfums de Marly",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "LAYA XCLUSIF",
+    "og": "Valaya Parfums de Marly Exclusif",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "VELVET ROSE",
+    "og": "Carolina Herrera Good Girl",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "VELVET DESIRE",
+    "og": "Carolina Herrera Very Good Girl",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "PURPLE CRYSTAL",
+    "og": "Bvlgari Omnia Amethyste",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "PRADOXE",
+    "og": "Prada Paradoxe",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "LIBRE",
+    "og": "YSL Libre",
+    "prices": {
+      "50": 549,
+      "100": 1180
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "SCANDAL",
+    "og": "SCANDALOUS",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "AMORE",
+    "og": "Born in Roma Women",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "QUEEN",
+    "og": "Killer Queen",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "BOMB",
+    "og": "Bombshell",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "KISSES",
+    "og": "Dark kiss",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "ECLAIRE",
+    "og": "Eclat Women",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "CANDY 42",
+    "og": "KAYALI 42 (VANILLA CANDY ROCK SUGAR)",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "WOMEN",
+    "name": "PISTACHE 33",
+    "og": "KAYALI 33 (pistachio gelato)",
+    "prices": {
+      "50": 499,
+      "100": 1069
+    }
+  },
+  {
+    "category": "EMPEROR SERIES",
+    "name": "Av3ntus x S@ntal 33",
+    "og": "EMPEROR I",
+    "prices": {
+      "50": 689
+    },
+    "mainAccords": "Woody, smoke, dry, aromatic",
+    "keyNotes": "pineapple, bergamot, birch, cedarwood, sandalwood, leather, musk",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "EMPEROR SERIES",
+    "name": "Av3ntus x GOF",
+    "og": "EMPEROR II",
+    "prices": {
+      "50": 689
+    },
+    "mainAccords": "Fruityk, smoky, tropical, amber",
+    "keyNotes": "pineapple, mango, saffron, birch, amber, cedarwood, musk",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "EMPEROR SERIES",
+    "name": "Av3ntus x GFS",
+    "og": "EMPEROR III",
+    "prices": {
+      "50": 689
+    },
+    "mainAccords": "fresh, clean, smoky, woody",
+    "keyNotes": "bergamot, pineapple, amber, vanilla",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "EMPEROR SERIES",
+    "name": "Aventus x Another 13",
+    "og": "EMPEROR IV",
+    "prices": {
+      "50": 689
+    },
+    "mainAccords": "musky, smoky, woody, clean",
+    "keyNotes": "pineapple, ambroxan, birch, cedarwood, musk",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "EMPEROR SERIES",
+    "name": "Aventus x Mojave Ghost",
+    "og": "EMPEROR V",
+    "prices": {
+      "50": 689
+    },
+    "mainAccords": "fruity, floral, woody, musky, smoky",
+    "keyNotes": "pineapple, bergamot, violet, sandalwood, amberwood, musk",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "CANNABIS SERIES",
+    "name": "Silver x CANNA",
+    "og": "MERCURY",
+    "prices": {
+      "50": 749
+    },
+    "mainAccords": "Aromatic green-woody, herbal, floral,smoky",
+    "keyNotes": "juniper, canna, musk, aromatic",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "CANNABIS SERIES",
+    "name": "Aventus x CANNA",
+    "og": "PINEAPPLE EXPRESS",
+    "prices": {
+      "50": 749
+    },
+    "mainAccords": "fuity, floral, aromatic green, smoky, woody, herbal",
+    "keyNotes": "pineapple, canna, bergamot, juniper, birch, musk",
+    "howCloseToOG": "Own twist"
+  },
+  {
+    "category": "CANNABIS SERIES",
+    "name": "Talisman x CANNA",
+    "og": "CRYPTONITE",
+    "prices": {
+      "50": 749
+    },
+    "mainAccords": "canna, ozonic aquatic, herbal, floral",
+    "keyNotes": "bergamot, agarwood, canna,  Amberwood, Vanilla",
+    "howCloseToOG": "Own twist"
+  }
+]
