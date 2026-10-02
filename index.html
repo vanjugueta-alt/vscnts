@@ -477,10 +477,9 @@ footer{border-top:1px solid var(--line);padding:60px 30px 25px;background:#03030
         <div class="checkout-two"><div class="checkout-field"><label class="checkout-label" for="customerProvince">PROVINCE *</label><input id="customerProvince" name="customerProvince" required placeholder="Province"></div><div class="checkout-field"><label class="checkout-label" for="customerCity">CITY *</label><input id="customerCity" name="customerCity" required placeholder="City"></div></div>
         <div class="checkout-two"><div class="checkout-field"><label class="checkout-label" for="customerBarangay">BARANGAY *</label><input id="customerBarangay" name="customerBarangay" required placeholder="Barangay"></div><div class="checkout-field"><label class="checkout-label" for="customerHouseNumber">HOUSE NUMBER *</label><input id="customerHouseNumber" name="customerHouseNumber" required placeholder="House / Unit No."></div></div>
         <div class="checkout-field"><label class="checkout-label">SHIPPING METHOD *</label><div class="shipping-choice" id="shippingChoice">
-          <label class="shipping-option selected" data-shipping="Lalamove"><input type="radio" name="shippingMethod" value="Lalamove" checked><span class="ship-name">Lalamove</span><span class="ship-fee">Shipping fee: ₱0</span><span class="ship-note">Scent order total only. Lalamove delivery fee is handled separately by the customer/driver.</span></label>
-          <label class="shipping-option" data-shipping="J&amp;T"><input type="radio" name="shippingMethod" value="J&amp;T"><span class="ship-name">J&amp;T Express</span><span class="ship-fee">Fixed shipping: ₱40</span><span class="ship-note">₱40 is added to the scent order total.</span></label>
-        </div></div>
-        <div class="payment-after-note">
+<label class="shipping-option selected" data-shipping="Lalamove"><input type="radio" name="shippingMethod" value="Lalamove" checked><span class="ship-name">Lalamove</span><span class="ship-fee">Shipping fee: ₱0</span><span class="ship-note">Scent order total only. Lalamove delivery fee is handled separately by the customer/driver.</span></label>
+<label class="shipping-option" data-shipping="J&amp;T"><input type="radio" name="shippingMethod" value="J&amp;T"><span class="ship-name">J&amp;T Express</span><span class="ship-fee">SF RATES (J&amp;T)</span><span class="ship-note" style="font-size:10px;line-height:1.65;color:#aaa">Metro Manila — ₱40<br>Outside Metro Manila — ₱50 to ₱80, depending on your area<br><strong style="color:var(--gold2)">5 or more scent orders — FREE SHIPPING via J&amp;T</strong><br><span style="color:#777">Shipping fee is not included in the order total. Final shipping fee will be confirmed based on your delivery address.</span></span></label>
+</div></div>         <div class="payment-after-note">
           <div class="payment-after-icon">✓</div>
           <div><strong>PAYMENT COMES AFTER ORDER SUBMISSION</strong><p>Submit your delivery and order details first. After your order reference is created, you will be taken to the payment step where you can choose your preferred QR account and upload your payment receipt.</p></div>
         </div>
@@ -585,21 +584,32 @@ function applyDatabaseProducts(rows){
     // MAIN ACCORDS / KEY NOTES / HOW CLOSE TO OG are scent-level details.
     // The Apps Script carries merged-cell values across all rows in the
     // product group, so the first row contains the complete detail set.
-    const mainAccords=String(first.mainAccords || '').trim();
-    const keyNotes=String(first.keyNotes || '').trim();
-    const howCloseToOG=first.howCloseToOG;
-    const howCloseDisplay=String(first.howCloseDisplay || '').trim();
+    // Details are scent-level and may be vertically merged. Use the first
+    // non-empty value in the whole product group, rather than assuming the
+    // first row contains every detail. This makes merged cells and copied
+    // rows both safe.
+    let mainAccords='';
+    let keyNotes='';
+    let howCloseToOG='';
+    let howCloseDisplay='';
+    rowsForProduct.forEach(function(row){
+      if(!mainAccords && String(row.mainAccords || '').trim()) mainAccords=String(row.mainAccords).trim();
+      if(!keyNotes && String(row.keyNotes || '').trim()) keyNotes=String(row.keyNotes).trim();
+      if((howCloseToOG === '' || howCloseToOG === null || howCloseToOG === undefined) && row.howCloseToOG !== undefined && row.howCloseToOG !== null && String(row.howCloseToOG).trim() !== '') howCloseToOG=row.howCloseToOG;
+      if(!howCloseDisplay && String(row.howCloseDisplay || '').trim()) howCloseDisplay=String(row.howCloseDisplay).trim();
+    });
 
-    if(mainAccords || keyNotes || howCloseDisplay || (howCloseToOG !== undefined && howCloseToOG !== null && howCloseToOG !== '')){
-      scentDetails[product.name]={
-        sourceScentName: product.name,
-        sourceInspiredBy: product.og || '',
-        mainAccords: mainAccords,
-        keyNotes: keyNotes,
-        howCloseToOG: howCloseToOG == null ? '' : howCloseToOG,
-        howCloseDisplay: howCloseDisplay || String(howCloseToOG || '')
-      };
-    }
+    // IMPORTANT: live Google Sheet values always replace the embedded/static
+    // scentDetails values. This prevents an old hard-coded percentage from
+    // remaining visible after the Sheet has been edited.
+    scentDetails[product.name]={
+      sourceScentName: product.name,
+      sourceInspiredBy: product.og || '',
+      mainAccords: mainAccords,
+      keyNotes: keyNotes,
+      howCloseToOG: howCloseToOG == null ? '' : howCloseToOG,
+      howCloseDisplay: howCloseDisplay || (howCloseToOG === '' ? '' : String(howCloseToOG))
+    };
 
     // Keep existing fallback details connected if the customer-facing
     // scent name changes and the new sheet does not yet contain details.
@@ -663,7 +673,7 @@ function updateDetailImage(){
 // V38 smart cache: show the last successful database state immediately,
 // then refresh Google Sheets in the background. This keeps the storefront
 // responsive while the live database remains the source of truth.
-const VSCNTS_CACHE_VERSION = 'v38.1';
+const VSCNTS_CACHE_VERSION = 'v38.3';
 const VSCNTS_STOCK_CACHE_KEY = 'vscnts_stock_cache_'+VSCNTS_CACHE_VERSION;
 const VSCNTS_IMAGES_CACHE_KEY = 'vscnts_images_cache_'+VSCNTS_CACHE_VERSION;
 const VSCNTS_CACHE_MAX_AGE = 24*60*60*1000;
@@ -820,6 +830,7 @@ function loadStock(){
           if(row.name && row.size!==undefined && Number.isFinite(n)) stockData[stockKey(row.name,row.size)]=Math.max(0,Math.floor(n));
         });
         stockLoaded=true;
+        if(payload.detailsSource === 'STOCK' && payload.detailsHeaders){ liveDetailsLoadedAt=Date.now(); }
         render();
         if(selectedProduct){
           const refreshed=products.find(function(p){return normalizeDatabaseName(p.og)===normalizeDatabaseName(selectedProduct.og);});
@@ -844,6 +855,7 @@ loadProductImages();
 // V34 live database refresh: re-check the Google Sheet every 30 seconds.
 // Also refresh when the visitor returns to the browser tab.
 const VSCNTS_DATABASE_REFRESH_MS = 30000;
+let liveDetailsLoadedAt = 0;
 setInterval(function(){ loadStock(); loadProductImages(); }, VSCNTS_DATABASE_REFRESH_MS);
 document.addEventListener('visibilitychange', function(){
   if(document.visibilityState === 'visible'){ loadStock(); loadProductImages(); }
@@ -1049,10 +1061,7 @@ function renderCheckoutSummary(){
   if(!cart.length){ list.innerHTML='<p style="color:#777;font-size:12px">Your cart is empty.</p>'; totalEl.textContent='₱0'; return; }
   list.innerHTML=cart.map(item=>`<div class="checkout-order-row"><div><span class="name">${item.name}</span><span class="meta">${item.category} · ${item.size}ML · Qty ${item.qty}</span></div><strong>${peso(item.unitPrice*item.qty)}</strong></div>`).join('');
   const scentTotal=cart.reduce((sum,item)=>sum+item.unitPrice*item.qty,0);
-  const method=document.querySelector('input[name="shippingMethod"]:checked')?.value || 'Lalamove';
-  const shippingFee=method==='J&T'?40:0;
-  totalEl.innerHTML=`<div class="checkout-breakdown"><div class="checkout-line"><span>SCENT ORDERS</span><strong>${peso(scentTotal)}</strong></div><div class="checkout-line shipping"><span>${method==='J&T'?'J&amp;T SHIPPING':'LALAMOVE SHIPPING'}</span><strong>${shippingFee?peso(shippingFee):'Handled separately'}</strong></div><div class="checkout-line" style="margin-top:14px"><span>TOTAL PAYMENT</span><strong style="font-size:24px;color:var(--gold2)">${peso(scentTotal+shippingFee)}</strong></div></div>`;
-  updatePaymentQR();
+  const method=document.querySelector('input[name="shippingMethod"]:checked')?.value || 'Lalamove';   const shippingFee=0;   const shippingLabel=method==='J&T'?'J&amp;T SHIPPING':'LALAMOVE SHIPPING';   const shippingStatus=method==='J&T'?'CONFIRMED SEPARATELY':'HANDLED SEPARATELY';   totalEl.innerHTML=`<div class="checkout-breakdown"><div class="checkout-line"><span>SCENT ORDERS</span><strong>${peso(scentTotal)}</strong></div><div class="checkout-line shipping"><span>${shippingLabel}</span><strong>${shippingStatus}</strong></div><div class="checkout-line" style="margin-top:14px"><span>TOTAL PAYMENT</span><strong style="font-size:24px;color:var(--gold2)">${peso(scentTotal)}</strong></div></div>`;   updatePaymentQR();
 }
 document.querySelectorAll('.shipping-option').forEach(label=>label.addEventListener('click',function(){
   document.querySelectorAll('.shipping-option').forEach(x=>x.classList.remove('selected'));
@@ -1098,8 +1107,8 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     const fd=new FormData(this);
     const scentTotal=cart.reduce((sum,item)=>sum+item.unitPrice*item.qty,0);
     const shippingMethod=fd.get('shippingMethod') || 'Lalamove';
-    const shippingFee=shippingMethod==='J&T'?40:0;
-    const total=scentTotal+shippingFee;
+    const shippingFee=0;
+    const total=scentTotal;
     const order={
       createdAt:new Date().toISOString(),
       status:'PENDING VERIFICATION',
@@ -1112,7 +1121,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     sendOrderToDatabase(order);
     localStorage.setItem('vscents_last_order',JSON.stringify(order));
     document.getElementById('orderReference').textContent=order.reference;
-    document.getElementById('successSummary').innerHTML=`${order.items.reduce((n,i)=>n+i.qty,0)} item(s) · <b>${peso(total)}</b><br><span style="color:#d8b86a">Shipping: ${shippingMethod}${shippingFee?' · '+peso(shippingFee):''}</span><br><span style="color:#888">Status: PENDING VERIFICATION</span>`;
+    document.getElementById('successSummary').innerHTML=`${order.items.reduce((n,i)=>n+i.qty,0)} item(s) · <b>${peso(total)}</b><br><span style="color:#d8b86a">Shipping: ${shippingMethod} — handled separately</span><br><span style="color:#888">Status: PENDING VERIFICATION</span>`;
     document.getElementById('checkoutFormView').style.display='none';
     document.getElementById('checkoutSuccess').classList.add('show');
     document.getElementById('paymentFinal').classList.remove('show');
