@@ -525,16 +525,18 @@ function applyDatabaseProducts(rows){
   if(!Array.isArray(rows)) return;
 
   /*
-   * V34 database rule:
-   * Only these Google Sheet fields are live/editable from the website:
-   *   B = Scent Name
-   *   C = PRICES
-   *   F = Stock
+   * LIVE Google Sheet fields:
+   *   NAME            -> reference / inspired-by text
+   *   Scent Name      -> main customer-facing scent name
+   *   PRICES          -> displayed prices
+   *   Stock           -> live inventory
+   *   MAIN ACCORDS    -> product detail
+   *   KEY NOTES       -> product detail
+   *   How close to OG -> product detail
    *
-   * Column A (NAME) is an internal/reference field and is intentionally NOT
-   * used to identify a website product.  The Apps Script supplies a stable
-   * productIndex based on the order of the product groups in the STOCK sheet.
-   * This prevents changing an internal NAME from breaking the website mapping.
+   * The Apps Script supplies a stable productIndex based on the order of
+   * product groups in STOCK. This keeps the website catalog mapping stable
+   * even when the NAME/reference text is edited.
    */
   const grouped={};
   let fallbackIndex=-1;
@@ -542,9 +544,7 @@ function applyDatabaseProducts(rows){
   rows.forEach(function(row){
     let index=Number(row.productIndex);
 
-    // Backward-compatible fallback for an already-deployed Apps Script.
-    // Older deployments do not send productIndex, so derive it from the
-    // existing product-group order without caring what NAME actually says.
+    // Backward-compatible fallback for an older Apps Script deployment.
     if(!Number.isInteger(index)){
       const internalKey=normalizeDatabaseName(row.internalName);
       if(internalKey!==previousInternalKey){
@@ -568,17 +568,12 @@ function applyDatabaseProducts(rows){
     const previousName=product.name;
     const first=rowsForProduct[0];
 
-    // LIVE database fields:
-    //   Column A (NAME)      -> small OG/reference text on the website
-    //   Column B (Scent Name)-> main customer-facing scent name
-    //   Column C (PRICES)    -> displayed prices
-    //   Column F (Stock)     -> inventory
-    // NAME is editable and may change; it does NOT change the product's
-    // internal catalog position because productIndex is used for mapping.
+    // Column A (NAME) -> reference / inspired-by text.
+    // Column B (Scent Name) -> main customer-facing name.
     if(first.name) product.name=String(first.name).trim();
     if(first.internalName) product.og=String(first.internalName).trim();
 
-    // Category and the product image mapping stay fixed.
+    // Live prices remain size-specific.
     const prices={};
     rowsForProduct.forEach(function(row){
       const size=String(row.size == null ? '' : row.size).trim();
@@ -587,8 +582,30 @@ function applyDatabaseProducts(rows){
     });
     if(Object.keys(prices).length) product.prices=prices;
 
-    // Keep the existing scent details connected when the customer-facing name changes.
-    if(previousName && product.name && previousName!==product.name && typeof scentDetails==='object' && scentDetails[previousName] && !scentDetails[product.name]){
+    // MAIN ACCORDS / KEY NOTES / HOW CLOSE TO OG are scent-level details.
+    // The Apps Script carries merged-cell values across all rows in the
+    // product group, so the first row contains the complete detail set.
+    const mainAccords=String(first.mainAccords || '').trim();
+    const keyNotes=String(first.keyNotes || '').trim();
+    const howCloseToOG=first.howCloseToOG;
+    const howCloseDisplay=String(first.howCloseDisplay || '').trim();
+
+    if(mainAccords || keyNotes || howCloseDisplay || (howCloseToOG !== undefined && howCloseToOG !== null && howCloseToOG !== '')){
+      scentDetails[product.name]={
+        sourceScentName: product.name,
+        sourceInspiredBy: product.og || '',
+        mainAccords: mainAccords,
+        keyNotes: keyNotes,
+        howCloseToOG: howCloseToOG == null ? '' : howCloseToOG,
+        howCloseDisplay: howCloseDisplay || String(howCloseToOG || '')
+      };
+    }
+
+    // Keep existing fallback details connected if the customer-facing
+    // scent name changes and the new sheet does not yet contain details.
+    if(previousName && product.name && previousName!==product.name &&
+       typeof scentDetails==='object' && scentDetails[previousName] &&
+       !scentDetails[product.name]){
       scentDetails[product.name]=scentDetails[previousName];
     }
   });
