@@ -544,55 +544,94 @@ function applyDatabaseProducts(rows){
   if(!Array.isArray(rows)) return;
 
   /*
-   * LIVE Google Sheet fields:
-   *   NAME            -> reference / inspired-by text
-   *   Scent Name      -> main customer-facing scent name
-   *   PRICES          -> displayed prices
-   *   Stock           -> live inventory
-   *   MAIN ACCORDS    -> product detail
-   *   KEY NOTES       -> product detail
-   *   How close to OG -> product detail
+   * DATABASE AUTHORITY RULE:
+   * The Google Sheet STOCK table is the source of truth for:
+   *   Scent Name -> customer-facing name
+   *   NAME       -> original / inspired-by reference
+   *   Category   -> website category
+   *   PRICES     -> size-specific prices
+   *   Stock      -> live inventory
+   *   scent details -> MAIN ACCORDS / KEY NOTES / HOW CLOSE TO OG
    *
-   * The Apps Script supplies a stable productIndex based on the order of
-   * product groups in STOCK. This keeps the website catalog mapping stable
-   * even when the NAME/reference text is edited.
+   * IMPORTANT:
+   * Do NOT map products by row/productIndex when a new scent is inserted.
+   * A new database row/group would otherwise shift every product after it
+   * and could make an UNISEX scent appear as WOMEN, etc.
+   *
+   * Existing products are matched by their actual Scent Name first, then
+   * by NAME/original reference as a fallback. The Category value from the
+   * database is always applied to the matched product.
    */
-  const grouped={};
-  let fallbackIndex=-1;
-  let previousInternalKey=null;
-  rows.forEach(function(row){
-    let index=Number(row.productIndex);
+  const matchedIndices={};
+  let catalogChanged=false;
 
-    // Backward-compatible fallback for an older Apps Script deployment.
-    if(!Number.isInteger(index)){
-      const internalKey=normalizeDatabaseName(row.internalName);
-      if(internalKey!==previousInternalKey){
-        fallbackIndex++;
-        previousInternalKey=internalKey;
+  function findExistingProduct(row){
+    const scentKey=normalizeDatabaseName(row.name);
+    const internalKey=normalizeDatabaseName(row.internalName);
+
+    if(scentKey){
+      for(let i=0;i<products.length;i++){
+        if(matchedIndices[i]) continue;
+        if(normalizeDatabaseName(products[i].name)===scentKey) return i;
       }
-      index=fallbackIndex;
     }
 
-    if(!Number.isInteger(index) || index<0 || index>=products.length) return;
-    if(!grouped[index]) grouped[index]=[];
-    grouped[index].push(row);
+    if(internalKey){
+      for(let i=0;i<products.length;i++){
+        if(matchedIndices[i]) continue;
+        if(normalizeDatabaseName(products[i].og)===internalKey) return i;
+      }
+    }
+
+    return -1;
+  }
+
+  // Group database rows by the product identity, NOT by row position.
+  const groups=[];
+  const groupMap={};
+  rows.forEach(function(row){
+    const scentKey=normalizeDatabaseName(row.name);
+    const internalKey=normalizeDatabaseName(row.internalName);
+    const key=scentKey || ('__internal__'+internalKey);
+    if(!key) return;
+    if(!groupMap[key]){
+      groupMap[key]=[];
+      groups.push(groupMap[key]);
+    }
+    groupMap[key].push(row);
   });
 
-  Object.keys(grouped).forEach(function(indexKey){
-    const index=Number(indexKey);
-    const product=products[index];
-    const rowsForProduct=grouped[index];
-    if(!product || !rowsForProduct.length) return;
-
-    const previousName=product.name;
+  groups.forEach(function(rowsForProduct){
+    if(!rowsForProduct.length) return;
     const first=rowsForProduct[0];
+    let index=findExistingProduct(first);
 
-    // Column A (NAME) -> reference / inspired-by text.
-    // Column B (Scent Name) -> main customer-facing name.
+    // If this is genuinely a new database scent, add it without disturbing
+    // the identity/order of existing products.
+    if(index < 0){
+      index=products.length;
+      catalogChanged=true;
+      products.push({
+        category: String(first.category || '').trim().toUpperCase(),
+        name: String(first.name || '').trim(),
+        og: String(first.internalName || '').trim(),
+        prices: {}
+      });
+    }
+    matchedIndices[index]=true;
+
+    const product=products[index];
+    const previousName=product.name;
+
+    // DATABASE CATEGORY IS AUTHORITATIVE.
+    if(first.category){
+      const databaseCategory=String(first.category).trim().toUpperCase();
+      if(product.category !== databaseCategory) catalogChanged=true;
+      product.category=databaseCategory;
+    }
     if(first.name) product.name=String(first.name).trim();
     if(first.internalName) product.og=String(first.internalName).trim();
 
-    // Live prices remain size-specific.
     const prices={};
     rowsForProduct.forEach(function(row){
       const size=String(row.size == null ? '' : row.size).trim();
@@ -601,13 +640,6 @@ function applyDatabaseProducts(rows){
     });
     if(Object.keys(prices).length) product.prices=prices;
 
-    // MAIN ACCORDS / KEY NOTES / HOW CLOSE TO OG are scent-level details.
-    // The Apps Script carries merged-cell values across all rows in the
-    // product group, so the first row contains the complete detail set.
-    // Details are scent-level and may be vertically merged. Use the first
-    // non-empty value in the whole product group, rather than assuming the
-    // first row contains every detail. This makes merged cells and copied
-    // rows both safe.
     let mainAccords='';
     let keyNotes='';
     let howCloseToOG='';
@@ -619,9 +651,6 @@ function applyDatabaseProducts(rows){
       if(!howCloseDisplay && String(row.howCloseDisplay || '').trim()) howCloseDisplay=String(row.howCloseDisplay).trim();
     });
 
-    // IMPORTANT: live Google Sheet values always replace the embedded/static
-    // scentDetails values. This prevents an old hard-coded percentage from
-    // remaining visible after the Sheet has been edited.
     scentDetails[product.name]={
       sourceScentName: product.name,
       sourceInspiredBy: product.og || '',
@@ -631,15 +660,16 @@ function applyDatabaseProducts(rows){
       howCloseDisplay: howCloseDisplay || (howCloseToOG === '' ? '' : String(howCloseToOG))
     };
 
-    // Keep existing fallback details connected if the customer-facing
-    // scent name changes and the new sheet does not yet contain details.
     if(previousName && product.name && previousName!==product.name &&
        typeof scentDetails==='object' && scentDetails[previousName] &&
        !scentDetails[product.name]){
       scentDetails[product.name]=scentDetails[previousName];
     }
   });
+
+  return catalogChanged;
 }
+
 function normalizeImageName(value){
   return String(value || '').toLowerCase().replace(/[®™]/g,'').replace(/\s+/g,' ').trim();
 }
@@ -916,7 +946,7 @@ function loadStock(){
     try{
       if(payload && payload.ok && Array.isArray(payload.stock)){
         saveVscentsCache(VSCNTS_STOCK_CACHE_KEY,payload);
-        applyDatabaseProducts(payload.stock);
+        const catalogChanged=applyDatabaseProducts(payload.stock);
         stockData={};
         payload.stock.forEach(function(row){
           const n=Number(row.stock);
@@ -924,9 +954,10 @@ function loadStock(){
         });
         stockLoaded=true;
         if(payload.detailsSource === 'STOCK' && payload.detailsHeaders){ liveDetailsLoadedAt=Date.now(); }
-        // Update stock labels in-place. Do NOT rebuild the product grid here;
-        // rebuilding it every 5 seconds recreates <img> elements and causes
-        // visible image blinking on mobile browsers.
+        // Only rebuild the product grid when the DATABASE CATEGORY or a
+        // genuinely new scent changes the catalog structure. Normal stock
+        // refreshes update labels in-place so images do not blink.
+        if(catalogChanged) render();
         updateGridStock();
         if(selectedProduct){
           const refreshed=products.find(function(p){return normalizeDatabaseName(p.og)===normalizeDatabaseName(selectedProduct.og);});
