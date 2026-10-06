@@ -1141,22 +1141,63 @@ function updatePaymentQR(){
 }
 function sendOrderToDatabase(order){
   if(!VSCNTS_APPS_SCRIPT_URL || VSCNTS_APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
-    throw new Error("Google Apps Script Web App URL is not configured yet.");
+    return Promise.reject(new Error("Google Apps Script Web App URL is not configured yet."));
   }
-  const iframe=document.createElement('iframe');
-  iframe.name='vscntsOrderSubmitFrame_'+Date.now();
-  iframe.style.display='none';
-  document.body.appendChild(iframe);
-  const form=document.createElement('form');
-  form.method='POST';
-  form.action=VSCNTS_APPS_SCRIPT_URL;
-  form.target=iframe.name;
-  form.style.display='none';
-  const input=document.createElement('input');
-  input.type='hidden'; input.name='payload'; input.value=JSON.stringify({action:'createOrder',order});
-  form.appendChild(input); document.body.appendChild(form);
-  form.submit();
-  setTimeout(()=>{form.remove();iframe.remove();},10000);
+
+  return new Promise(function(resolve,reject){
+    const iframe=document.createElement('iframe');
+    iframe.name='vscntsOrderSubmitFrame_'+Date.now();
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=VSCNTS_APPS_SCRIPT_URL;
+    form.target=iframe.name;
+    form.style.display='none';
+
+    const clientToken='VSCNTS-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+    const payload={action:'createOrder',order,clientToken};
+    const input=document.createElement('input');
+    input.type='hidden';
+    input.name='payload';
+    input.value=JSON.stringify(payload);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    let settled=false;
+    const cleanup=function(){
+      window.removeEventListener('message',onMessage);
+      clearTimeout(timeout);
+      try{ form.remove(); }catch(e){}
+      try{ iframe.remove(); }catch(e){}
+    };
+
+    const onMessage=function(event){
+      const data=event && event.data;
+      if(!data || data.type!=='VSCNTS_ORDER_RESULT' || !data.payload) return;
+      const result=data.payload;
+      if(String(result.clientToken||'')!==clientToken) return;
+      if(settled) return;
+      settled=true;
+      cleanup();
+      if(result.ok){
+        resolve(result);
+      }else{
+        reject(new Error(result.error||'The order could not be saved.'));
+      }
+    };
+
+    const timeout=setTimeout(function(){
+      if(settled) return;
+      settled=true;
+      cleanup();
+      reject(new Error('We could not confirm the database response yet. Please do not submit the order again. Your reference is '+order.reference+'. Contact VSCNTS so we can verify whether it was recorded.'));
+    },30000);
+
+    window.addEventListener('message',onMessage);
+    form.submit();
+  });
 }
 
 function renderCheckoutSummary(){
@@ -1226,14 +1267,25 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
       scentTotal,total
     };
     order.reference='VSC-'+Date.now().toString(36).toUpperCase().slice(-8);
-    sendOrderToDatabase(order);
-    // Refresh the live database repeatedly after submission so the new stock appears quickly.
+
+    // Wait for the actual Apps Script response before showing the success screen.
+    // The previous version showed success immediately after form.submit(), even
+    // when Apps Script rejected the order.
+    const dbResult=await sendOrderToDatabase(order);
+    order.reference=dbResult.orderRef || order.reference;
+    order.status=dbResult.inventoryReviewRequired ? 'INVENTORY REVIEW REQUIRED' : 'PENDING VERIFICATION';
+
+    // Refresh the live database repeatedly after a confirmed submission so the new stock appears quickly.
     [500,1500,3000,5000,8000,10000].forEach(function(delay){
       setTimeout(function(){ loadStock(); }, delay);
     });
+
     localStorage.setItem('vscents_last_order',JSON.stringify(order));
     document.getElementById('orderReference').textContent=order.reference;
-    document.getElementById('successSummary').innerHTML=`${order.items.reduce((n,i)=>n+i.qty,0)} item(s) · <b>${peso(total)}</b><br><span style="color:#d8b86a">J&amp;T Shipping: confirmed separately based on delivery address</span><br><span style="color:#888">Status: PENDING VERIFICATION</span>`;
+    const orderStatusText=dbResult.inventoryReviewRequired
+      ? 'Status: INVENTORY REVIEW REQUIRED — VSCNTS will verify availability before confirmation.'
+      : 'Status: PENDING VERIFICATION';
+    document.getElementById('successSummary').innerHTML=`${order.items.reduce((n,i)=>n+i.qty,0)} item(s) · <b>${peso(total)}</b><br><span style="color:#d8b86a">J&amp;T Shipping: confirmed separately based on delivery address</span><br><span style="color:#888">${orderStatusText}</span>`;
     document.getElementById('checkoutFormView').style.display='none';
     document.getElementById('checkoutSuccess').classList.add('show');
     document.getElementById('paymentFinal').classList.remove('show');
