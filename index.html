@@ -1,4 +1,3 @@
-
 <!-- VSCNTS V38.5: Larger product detail image -->
 <!doctype html>
 <html lang="en">
@@ -932,11 +931,11 @@ loadProductImages();
 // Also refresh when the visitor returns to the browser tab.
 const VSCNTS_DATABASE_REFRESH_MS = 5000;
 let liveDetailsLoadedAt = 0;
-setInterval(function(){ loadStock(); loadProductImages(); }, VSCNTS_DATABASE_REFRESH_MS);
+setInterval(function(){ loadStock(); }, VSCNTS_DATABASE_REFRESH_MS);
 document.addEventListener('visibilitychange', function(){
-  if(document.visibilityState === 'visible'){ loadStock(); loadProductImages(); }
+  if(document.visibilityState === 'visible'){ loadStock(); }
 });
-window.addEventListener('focus', function(){ loadStock(); loadProductImages(); });
+window.addEventListener('focus', function(){ loadStock(); });
 
 function openProductDetail(productName) {
   const product = products.find(p => p.name === productName);
@@ -1209,7 +1208,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     sendOrderToDatabase(order);
     // Refresh the live database repeatedly after submission so the new stock appears quickly.
     [500,1500,3000,5000,8000,10000].forEach(function(delay){
-      setTimeout(function(){ loadStock(); loadProductImages(); }, delay);
+      setTimeout(function(){ loadStock(); }, delay);
     });
     localStorage.setItem('vscents_last_order',JSON.stringify(order));
     document.getElementById('orderReference').textContent=order.reference;
