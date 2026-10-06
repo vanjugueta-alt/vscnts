@@ -1275,10 +1275,27 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     order.reference=dbResult.orderRef || order.reference;
     order.status=dbResult.inventoryReviewRequired ? 'INVENTORY REVIEW REQUIRED' : 'PENDING VERIFICATION';
 
-    // Refresh the live database repeatedly after a confirmed submission so the new stock appears quickly.
-    [500,1500,3000,5000,8000,10000].forEach(function(delay){
-      setTimeout(function(){ loadStock(); }, delay);
-    });
+    // Update the customer's visible stock immediately after a confirmed order.
+    // Do not schedule multiple delayed refreshes; the normal live poll remains
+    // the source-of-truth sync and will reconcile with Google Sheets.
+    if(!dbResult.inventoryReviewRequired){
+      order.items.forEach(function(item){
+        const key=stockKey(item.name,item.size);
+        const current=getStock(item.name,item.size);
+        if(current !== null){
+          stockData[key]=Math.max(0,current-Number(item.qty||0));
+        }
+      });
+      updateGridStock();
+      if(selectedProduct){
+        applyStockToSizeButtons();
+        updateDetailStock();
+        updateDetailTotal();
+      }
+    }
+    // One background sync confirms the database value without creating a
+    // chain of delayed requests.
+    loadStock();
 
     localStorage.setItem('vscents_last_order',JSON.stringify(order));
     document.getElementById('orderReference').textContent=order.reference;
