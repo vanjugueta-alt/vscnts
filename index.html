@@ -889,6 +889,24 @@ function applyStockToSizeButtons(){
     else { button.classList.remove('stock-out'); button.disabled=false; }
   });
 }
+function updateGridStock(){
+  const grid=document.getElementById('grid');
+  if(!grid) return;
+  grid.querySelectorAll('.product').forEach(function(card){
+    const name=card.getAttribute('data-product-name');
+    const product=products.find(function(p){ return p.name===name; });
+    if(!product) return;
+    card.querySelectorAll('.pill').forEach(function(pill){
+      const b=pill.querySelector('b');
+      const stockEl=pill.querySelector('.card-stock');
+      if(!b || !stockEl) return;
+      const size=(b.textContent||'').replace(/ML/i,'').trim();
+      const info=stockLabel(getStock(product.name,size));
+      stockEl.textContent=info.text;
+      stockEl.className='card-stock '+info.cls;
+    });
+  });
+}
 function loadStock(){
   // V34: allow repeated refreshes so Google Sheet edits propagate to the website.
   if(stockLoading || !VSCNTS_STOCK_URL || VSCNTS_STOCK_URL.includes('PASTE_YOUR')) return;
@@ -906,7 +924,10 @@ function loadStock(){
         });
         stockLoaded=true;
         if(payload.detailsSource === 'STOCK' && payload.detailsHeaders){ liveDetailsLoadedAt=Date.now(); }
-        render();
+        // Update stock labels in-place. Do NOT rebuild the product grid here;
+        // rebuilding it every 5 seconds recreates <img> elements and causes
+        // visible image blinking on mobile browsers.
+        updateGridStock();
         if(selectedProduct){
           const refreshed=products.find(function(p){return normalizeDatabaseName(p.og)===normalizeDatabaseName(selectedProduct.og);});
           if(refreshed) selectedProduct=refreshed;
