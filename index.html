@@ -621,6 +621,10 @@ function applyDatabaseProducts(rows){
     matchedIndices[index]=true;
 
     const product=products[index];
+
+    // Preserve the exact product-group order from the STOCK sheet.
+    // The first database row for each scent determines its catalog position.
+    product._databaseOrder = groups.indexOf(rowsForProduct);
     const previousName=product.name;
 
     // DATABASE CATEGORY IS AUTHORITATIVE.
@@ -864,6 +868,16 @@ function render(){
  let normalize = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
  let nq=normalize(q);
  let list=products.filter(p=>(currentCategory==='ALL'||p.category===currentCategory)&&(!nq||normalize(p.name).includes(nq)||normalize(p.og).includes(nq)||normalize(p.category).includes(nq))&&(size==='ALL'||p.prices[size]!==undefined));
+
+ // Follow the database row/group order inside every category.
+ // This means moving VIBRATO above IMAGINE in STOCK also moves it above IMAGINE
+ // on the website, without changing the stock refresh mechanism.
+ list.sort(function(a,b){
+   const ao=Number.isFinite(a._databaseOrder) ? a._databaseOrder : Number.MAX_SAFE_INTEGER;
+   const bo=Number.isFinite(b._databaseOrder) ? b._databaseOrder : Number.MAX_SAFE_INTEGER;
+   return ao-bo;
+ });
+
  document.getElementById('grid').innerHTML=list.map(p=>`<article class="product" tabindex="0" role="button" aria-label="View details" data-product-name="${p.name}"><div class="photo" aria-label="Product image placeholder" data-image-name="${p.name}"><span class="image-placeholder-label">IMAGE</span></div><div class="info"><div class="tag">${p.category}</div><h3>${p.name}</h3><div class="og">${p.og}</div><div class="prices">${Object.entries(p.prices).map(([s,v])=>{ const st=getStock(p.name,s); const si=stockLabel(st); return `<span class="pill"><b>${s}ML</b>${priceMarkup(p,s)}<small class="card-stock ${si.cls}">${si.text}</small></span>`; }).join('')}</div></div></article>`).join('')||'<p style="color:#777">No scent found.</p>';
  paintProductImages();
 }
