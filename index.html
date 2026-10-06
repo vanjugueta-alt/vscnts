@@ -948,9 +948,9 @@ function loadStock(){
 loadStock();
 loadProductImages();
 
-// V34 live database refresh: re-check the Google Sheet every 5 seconds.
+// V35 live stock refresh: re-check the Google Sheet every 2 seconds.
 // Also refresh when the visitor returns to the browser tab.
-const VSCNTS_DATABASE_REFRESH_MS = 5000;
+const VSCNTS_DATABASE_REFRESH_MS = 2000;
 let liveDetailsLoadedAt = 0;
 setInterval(function(){ loadStock(); }, VSCNTS_DATABASE_REFRESH_MS);
 document.addEventListener('visibilitychange', function(){
