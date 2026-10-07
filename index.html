@@ -553,47 +553,110 @@ function applyDatabaseProducts(rows){
    *   Stock      -> live inventory
    *   scent details -> MAIN ACCORDS / KEY NOTES / HOW CLOSE TO OG
    *
-   * IMPORTANT:
-   * Do NOT map products by row/productIndex when a new scent is inserted.
-   * A new database row/group would otherwise shift every product after it
-   * and could make an UNISEX scent appear as WOMEN, etc.
+   * IMPORTANT NAME-MAPPING RULE:
+   * The website catalog and STOCK sheet may use the two name fields in
+   * opposite directions. For example:
+   *   STOCK NAME       = EMPEROR I
+   *   STOCK Scent Name = Av3ntus x S@ntal 33
+   *   WEBSITE name     = Av3ntus x S@ntal 33
+   *   WEBSITE og       = EMPEROR I
    *
-   * Existing products are matched by their actual Scent Name first, then
-   * by NAME/original reference as a fallback. The Category value from the
-   * database is always applied to the matched product.
+   * Therefore a database product is considered the same product when ANY
+   * non-empty database name matches either the website name OR website og.
+   * This prevents an existing product from being appended a second time
+   * merely because NAME and Scent Name were edited/swapped.
+   *
+   * Do NOT map products by row/productIndex. A new database row/group must
+   * never shift the identity of existing products.
    */
   const matchedIndices={};
   let catalogChanged=false;
 
-  function findExistingProduct(row){
-    const scentKey=normalizeDatabaseName(row.name);
-    const internalKey=normalizeDatabaseName(row.internalName);
+  // Emperor/Cannabis are special series whose database NAME and Scent Name
+  // may both be renamed. Their position inside the series is the stable
+  // identity, so a rename must update the existing website product instead
+  // of making it disappear or creating a duplicate.
+  function normalizeDatabaseCategory(value){
+    const key=normalizeDatabaseName(value).replace(/\s+/g,' ');
+    if(key==='emperor' || key==='emperor series') return 'EMPEROR SERIES';
+    if(key==='cannabis' || key==='cannabis series') return 'CANNABIS SERIES';
+    return String(value || '').trim().toUpperCase();
+  }
 
-    if(scentKey){
-      for(let i=0;i<products.length;i++){
-        if(matchedIndices[i]) continue;
-        if(normalizeDatabaseName(products[i].name)===scentKey) return i;
-      }
+  const specialSeriesTargets={
+    'EMPEROR SERIES': products.map(function(product,index){
+      return {product:product,index:index};
+    }).filter(function(item){ return normalizeDatabaseCategory(item.product.category)==='EMPEROR SERIES'; }),
+    'CANNABIS SERIES': products.map(function(product,index){
+      return {product:product,index:index};
+    }).filter(function(item){ return normalizeDatabaseCategory(item.product.category)==='CANNABIS SERIES'; })
+  };
+  const specialSeriesCounts={
+    'EMPEROR SERIES':0,
+    'CANNABIS SERIES':0
+  };
+
+  function nameKeys(row){
+    const keys=[];
+    [row && row.name, row && row.internalName].forEach(function(value){
+      const key=normalizeDatabaseName(value);
+      if(key && keys.indexOf(key)===-1) keys.push(key);
+    });
+    return keys;
+  }
+
+  function productKeys(product){
+    const keys=[];
+    [product && product.name, product && product.og].forEach(function(value){
+      const key=normalizeDatabaseName(value);
+      if(key && keys.indexOf(key)===-1) keys.push(key);
+    });
+    return keys;
+  }
+
+  function keysIntersect(a,b){
+    for(let i=0;i<a.length;i++){
+      if(b.indexOf(a[i])!==-1) return true;
     }
+    return false;
+  }
 
-    if(internalKey){
-      for(let i=0;i<products.length;i++){
-        if(matchedIndices[i]) continue;
-        if(normalizeDatabaseName(products[i].og)===internalKey) return i;
-      }
+  function findExistingProduct(rowsForProduct){
+    const databaseKeys=[];
+    rowsForProduct.forEach(function(row){
+      nameKeys(row).forEach(function(key){
+        if(databaseKeys.indexOf(key)===-1) databaseKeys.push(key);
+      });
+    });
+
+    if(!databaseKeys.length) return -1;
+
+    for(let i=0;i<products.length;i++){
+      if(matchedIndices[i]) continue;
+      if(keysIntersect(databaseKeys,productKeys(products[i]))) return i;
     }
-
     return -1;
   }
 
-  // Group database rows by the product identity, NOT by row position.
+  // Group rows by BOTH database name fields so changing/swapping NAME and
+  // Scent Name does not create a second product group.
   const groups=[];
   const groupMap={};
+
+  // Only real storefront bottle sizes belong in the product catalog.
+  // The STOCK sheet can also contain internal inventory rows such as
+  // TITIMPLAHIN / container / TOTALML. Those rows must never become
+  // customer-facing products.
+  function isStorefrontRow(row){
+    const size=String(row && row.size == null ? '' : (row && row.size || '')).trim().toUpperCase();
+    return size==='50' || size==='55' || size==='100';
+  }
+
   rows.forEach(function(row){
-    const scentKey=normalizeDatabaseName(row.name);
-    const internalKey=normalizeDatabaseName(row.internalName);
-    const key=scentKey || ('__internal__'+internalKey);
-    if(!key) return;
+    if(!isStorefrontRow(row)) return;
+    const keys=nameKeys(row);
+    if(!keys.length) return;
+    const key=keys.slice().sort().join('||');
     if(!groupMap[key]){
       groupMap[key]=[];
       groups.push(groupMap[key]);
@@ -601,18 +664,31 @@ function applyDatabaseProducts(rows){
     groupMap[key].push(row);
   });
 
-  groups.forEach(function(rowsForProduct){
+  groups.forEach(function(rowsForProduct,groupIndex){
     if(!rowsForProduct.length) return;
     const first=rowsForProduct[0];
-    let index=findExistingProduct(first);
+    const databaseCategory=normalizeDatabaseCategory(first.category);
+    let index=-1;
 
-    // If this is genuinely a new database scent, add it without disturbing
-    // the identity/order of existing products.
+    // For Emperor/Cannabis, the order inside that series is the stable
+    // identity. This allows BOTH NAME and Scent Name to change while the
+    // existing product card, image, and details remain attached to it.
+    if(specialSeriesTargets[databaseCategory]){
+      const ordinal=specialSeriesCounts[databaseCategory]++;
+      const target=specialSeriesTargets[databaseCategory][ordinal];
+      if(target && !matchedIndices[target.index]) index=target.index;
+    }
+
+    // All other products continue to use the name-based matching logic.
+    if(index < 0) index=findExistingProduct(rowsForProduct);
+
+    // Only create a new product when NEITHER the special-series position nor
+    // either database name matches an existing website product.
     if(index < 0){
       index=products.length;
       catalogChanged=true;
       products.push({
-        category: String(first.category || '').trim().toUpperCase(),
+        category: databaseCategory,
         name: String(first.name || '').trim(),
         og: String(first.internalName || '').trim(),
         prices: {}
@@ -621,20 +697,27 @@ function applyDatabaseProducts(rows){
     matchedIndices[index]=true;
 
     const product=products[index];
-
-    // Preserve the exact product-group order from the STOCK sheet.
-    // The first database row for each scent determines its catalog position.
-    product._databaseOrder = groups.indexOf(rowsForProduct);
+    product._databaseOrder=groupIndex;
     const previousName=product.name;
 
     // DATABASE CATEGORY IS AUTHORITATIVE.
     if(first.category){
-      const databaseCategory=String(first.category).trim().toUpperCase();
       if(product.category !== databaseCategory) catalogChanged=true;
       product.category=databaseCategory;
     }
-    if(first.name) product.name=String(first.name).trim();
-    if(first.internalName) product.og=String(first.internalName).trim();
+
+    // For the Emperor/Cannabis series, the database NAME is the customer-
+    // facing series name (e.g. EMPEROR I / MERCURY), while Scent Name is the
+    // scent/reference text shown underneath. For the regular MEN/WOMEN/
+    // UNISEX catalog, Scent Name remains customer-facing and NAME remains
+    // the original/reference field.
+    if(specialSeriesTargets[databaseCategory]){
+      if(first.internalName) product.name=String(first.internalName).trim();
+      if(first.name) product.og=String(first.name).trim();
+    } else {
+      if(first.name) product.name=String(first.name).trim();
+      if(first.internalName) product.og=String(first.internalName).trim();
+    }
 
     const prices={};
     rowsForProduct.forEach(function(row){
@@ -887,8 +970,31 @@ const VSCNTS_STOCK_URL = VSCNTS_APPS_SCRIPT_URL;
 
 function stockKey(name,size){ return String(name).trim().toLowerCase()+'|'+String(size).trim(); }
 function getStock(name,size){
-  const v=stockData[stockKey(name,size)];
-  return (typeof v==='number' && Number.isFinite(v)) ? Math.max(0,Math.floor(v)) : null;
+  // Primary lookup remains unchanged for all regular products.
+  // Emperor/Cannabis products may display the database Scent Name while
+  // their inventory row is keyed by NAME, so fall back to the product's
+  // alternate identity without changing the catalog/name mapping itself.
+  const direct=stockData[stockKey(name,size)];
+  if(typeof direct==='number' && Number.isFinite(direct)){
+    return Math.max(0,Math.floor(direct));
+  }
+
+  const product=products.find(function(p){
+    return normalizeDatabaseName(p && p.name)===normalizeDatabaseName(name);
+  });
+  if(product){
+    const aliases=[product.og, product.name];
+    for(let i=0;i<aliases.length;i++){
+      const alias=String(aliases[i] || '').trim();
+      if(!alias) continue;
+      const v=stockData[stockKey(alias,size)];
+      if(typeof v==='number' && Number.isFinite(v)){
+        return Math.max(0,Math.floor(v));
+      }
+    }
+  }
+
+  return null;
 }
 function stockLabel(stock){
   if(stock===null) return {text:'STOCK NOT SET', cls:'stock-unset'};
