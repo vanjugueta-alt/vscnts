@@ -1290,6 +1290,29 @@ function updatePaymentQR(){
     paymentAmount.textContent=peso(order?.total || 0);
   }
 }
+// Generate the invoice after checkout has already shown order success.
+// This keeps the customer from waiting for the invoice sheet formatting work.
+function generateInvoiceInBackground(orderRef){
+  if(!orderRef || !VSCNTS_APPS_SCRIPT_URL) return;
+  try{
+    const frame=document.createElement('iframe');
+    frame.name='vscntsInvoiceFrame_'+Date.now();
+    frame.style.display='none';
+    document.body.appendChild(frame);
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=VSCNTS_APPS_SCRIPT_URL;
+    form.target=frame.name;
+    form.style.display='none';
+    const payload={action:'generateInvoice',orderRef:String(orderRef),clientToken:'VSCNTS-INVOICE-'+Date.now().toString(36)};
+    const input=document.createElement('input');
+    input.type='hidden'; input.name='payload'; input.value=JSON.stringify(payload);
+    form.appendChild(input); document.body.appendChild(form); form.submit();
+    // Allow the request to run; clean up the hidden elements later.
+    window.setTimeout(function(){try{form.remove();frame.remove();}catch(e){}},120000);
+  }catch(e){ console.warn('Invoice generation could not be started in background:',e); }
+}
+
 function sendOrderToDatabase(order){
   if(!VSCNTS_APPS_SCRIPT_URL || VSCNTS_APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
     return Promise.reject(new Error("Google Apps Script Web App URL is not configured yet."));
@@ -1425,6 +1448,8 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     const dbResult=await sendOrderToDatabase(order);
     order.reference=dbResult.orderRef || order.reference;
     order.status=dbResult.inventoryReviewRequired ? 'INVENTORY REVIEW REQUIRED' : 'PENDING VERIFICATION';
+    // Do not wait for invoice formatting: it now runs as a separate request.
+    generateInvoiceInBackground(order.reference);
 
     // Update the customer's visible stock immediately after a confirmed order.
     // Do not schedule multiple delayed refreshes; the normal live poll remains
