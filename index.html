@@ -522,6 +522,7 @@ footer{border-top:1px solid var(--line);padding:60px 30px 25px;background:#03030
         <p class="checkout-required">Please provide your delivery details. Fields marked * are required.</p>
         <div class="checkout-field"><label class="checkout-label" for="customerName">NAME *</label><input id="customerName" name="customerName" required placeholder="Your full name"></div>
         <div class="checkout-field"><label class="checkout-label" for="customerPhone">CONTACT NUMBER *</label><input id="customerPhone" name="customerPhone" required inputmode="tel" placeholder="09XX XXX XXXX"></div>
+        <div class="checkout-field"><label class="checkout-label" for="customerSocialName">FB/TIKTOK NAME *</label><input id="customerSocialName" name="customerSocialName" required placeholder="Enter your Facebook or TikTok name"></div>
         <div class="checkout-field"><label class="checkout-label" for="customerAddress">COMPLETE ADDRESS *</label><textarea id="customerAddress" name="customerAddress" required placeholder="Street, subdivision/village, building name, or other complete address details"></textarea></div>
         <div class="checkout-two"><div class="checkout-field"><label class="checkout-label" for="customerProvince">PROVINCE *</label><input id="customerProvince" name="customerProvince" required placeholder="Province"></div><div class="checkout-field"><label class="checkout-label" for="customerCity">CITY *</label><input id="customerCity" name="customerCity" required placeholder="City"></div></div>
         <div class="checkout-two"><div class="checkout-field"><label class="checkout-label" for="customerBarangay">BARANGAY *</label><input id="customerBarangay" name="customerBarangay" required placeholder="Barangay"></div><div class="checkout-field"><label class="checkout-label" for="customerHouseNumber">HOUSE NUMBER *</label><input id="customerHouseNumber" name="customerHouseNumber" required placeholder="House / Unit No."></div></div>
@@ -1483,7 +1484,7 @@ function closeCheckout(){
   document.body.style.overflow='';
 }
 function buildOrderText(order){
-  const lines=['VSCNTS ORDER '+order.reference,'',`Name: ${order.customer.name}`,`Contact Number: ${order.customer.phone}`,`Complete Address: ${order.customer.address}`,`Province: ${order.customer.province}`,`City: ${order.customer.city}`,`Barangay: ${order.customer.barangay}`,`House Number: ${order.customer.houseNumber}`,'','ITEMS:'];
+  const lines=['VSCNTS ORDER '+order.reference,'',`Name: ${order.customer.name}`,`Contact Number: ${order.customer.phone}`,`FB/TikTok Name: ${order.customer.socialName||''}`,`Complete Address: ${order.customer.address}`,`Province: ${order.customer.province}`,`City: ${order.customer.city}`,`Barangay: ${order.customer.barangay}`,`House Number: ${order.customer.houseNumber}`,'','ITEMS:'];
   order.items.forEach(i=>lines.push(`${i.name} | ${i.size}ML | Qty ${i.qty} | ${peso(i.unitPrice*i.qty)}`));
   lines.push('',`SHIPPING: ${order.shipping?.method||'Lalamove'}`,`SHIPPING FEE: ${order.shipping?.fee?peso(order.shipping.fee):'Handled separately'}`,`SCENT ORDERS: ${peso(order.scentTotal??order.total)}`,`TOTAL PAYMENT: ${peso(order.total)}`);
   return lines.join('\n');
@@ -1506,7 +1507,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     const order={
       createdAt:new Date().toISOString(),
       status:'PENDING VERIFICATION',
-      customer:{name:fd.get('customerName'),phone:fd.get('customerPhone'),address:fd.get('customerAddress'),province:fd.get('customerProvince'),city:fd.get('customerCity'),barangay:fd.get('customerBarangay'),houseNumber:fd.get('customerHouseNumber')},
+      customer:{name:fd.get('customerName'),phone:fd.get('customerPhone'),socialName:fd.get('customerSocialName'),address:fd.get('customerAddress'),province:fd.get('customerProvince'),city:fd.get('customerCity'),barangay:fd.get('customerBarangay'),houseNumber:fd.get('customerHouseNumber')},
       shipping:{method:shippingMethod,fee:shippingFee},
       items:cart.map(x=>({...x})),
       scentTotal,total
